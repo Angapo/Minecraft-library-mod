@@ -1,0 +1,20 @@
+[
+    {
+        "name": "OptiFine HD",
+        "description": "เพิ่มประสิทธิภาพเกม ลด Lag พร้อม Shader สวยงาม",
+        "imgurl": "https://example.com/optifine.png",
+        "version-mod": "1.20.1",
+        "link": "https://example.com/download/optifine.jar",
+        "category": "tech",
+        "popular": true
+    },
+    {
+        "name": "JEI",
+        "description": "ดู Recipe การคราฟต์ทั้งหมด",
+        "imgurl": "https://example.com/jei.png",
+        "version-mod": "1.20.1",
+        "link": "https://example.com/download/jei.jar",
+        "category": "tech",
+        "popular": true
+    }
+]
