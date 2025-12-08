@@ -36,21 +36,193 @@ Mod นี้ถูกสร้างขึ้นด้วยปรัชญา�
 
 ## 💡 การใช้งาน
 
+### การเพิ่ม Dependency
+
+#### สำหรับ Gradle (Forge/Fabric)
+
+```gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    // สำหรับ Forge
+    implementation fg.deobf("com.github.yourusername:yourmod:1.0.0")
+    
+    // สำหรับ Fabric
+    modImplementation "com.github.yourusername:yourmod:1.0.0"
+}
+```
+
+### ตัวอย่างโค้ด
+
+#### 1. การเริ่มต้นใช้งาน
+
 ```java
-// ตัวอย่างการใช้งานพื้นฐาน
 import com.yourlibrary.api.*;
 
-public class ExampleMod {
-    public void init() {
+@Mod("yourmod")
+public class YourMod {
+    public YourMod() {
+        // เริ่มต้น Library
         LibraryAPI.initialize();
-        // โค้ดของคุณที่นี่
+        
+        // ลงทะเบียน Events
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+}
+```
+
+#### 2. การสร้าง Custom Block
+
+```java
+import com.yourlibrary.api.block.CustomBlock;
+
+public class MyCustomBlock extends CustomBlock {
+    public MyCustomBlock() {
+        super(Properties.of(Material.STONE)
+            .strength(3.0f)
+            .requiresCorrectToolForDrops()
+        );
+    }
+    
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos) {
+        // โค้ดของคุณเมื่อวางบล็อก
+    }
+}
+```
+
+#### 3. การสร้าง Custom Item
+
+```java
+import com.yourlibrary.api.item.CustomItem;
+
+public class MagicWand extends CustomItem {
+    public MagicWand() {
+        super(new Properties()
+            .stacksTo(1)
+            .rarity(Rarity.RARE)
+        );
+    }
+    
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player) {
+        // ใช้งานไอเทม
+        return InteractionResultHolder.success(player.getItemInHand());
+    }
+}
+```
+
+#### 4. การจัดการ Config
+
+```java
+import com.yourlibrary.api.config.Config;
+
+public class ModConfig {
+    @Config.Entry(comment = "ความเร็วของผู้เล่น")
+    public static double playerSpeed = 1.0;
+    
+    @Config.Entry(comment = "เปิดใช้งานคุณสมบัติพิเศษ")
+    public static boolean enableSpecialFeature = true;
+    
+    public static void load() {
+        Config.load(ModConfig.class, "yourmod-config.json");
+    }
+}
+```
+
+#### 5. การใช้งาน Utility Methods
+
+```java
+import com.yourlibrary.api.util.*;
+
+// ตรวจสอบว่าเป็น Server Side หรือ Client Side
+if (WorldUtil.isServerSide(level)) {
+    // โค้ดสำหรับ Server
+}
+
+// หา Block ใกล้เคียง
+List<BlockPos> nearbyBlocks = WorldUtil.findNearbyBlocks(
+    level, pos, Blocks.DIAMOND_ORE, 10
+);
+
+// ส่งข้อความถึงผู้เล่น
+PlayerUtil.sendMessage(player, "สวัสดี!");
+
+// เพิ่ม Item ให้ผู้เล่น
+ItemUtil.giveItem(player, new ItemStack(Items.DIAMOND, 5));
+```
+
+#### 6. การสร้าง Custom Entity
+
+```java
+import com.yourlibrary.api.entity.CustomEntity;
+
+public class FriendlyRobot extends CustomEntity {
+    public FriendlyRobot(EntityType<?> type, Level level) {
+        super(type, level);
+    }
+    
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new FollowOwnerGoal(this));
+        this.goalSelector.addGoal(2, new WanderGoal(this));
+    }
+    
+    @Override
+    public void tick() {
+        super.tick();
+        // อัพเดตทุก tick
+    }
+}
+```
+
+#### 7. Event Handling
+
+```java
+import com.yourlibrary.api.event.*;
+
+@EventHandler
+public class MyEventHandler {
+    
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        player.sendMessage(Component.literal("ยินดีต้อนรับ!"));
+    }
+    
+    @SubscribeEvent
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (event.getBlock() == Blocks.DIAMOND_ORE) {
+            // ทำอะไรบางอย่างเมื่อขุดเพชร
+        }
     }
 }
 ```
 
 ## 📖 เอกสาร
 
-เอกสารฉบับเต็มสามารถดูได้ที่ [Wiki](../../wiki) ของโปรเจค
+### API Reference
+
+**Core Classes:**
+- `LibraryAPI` - จุดเริ่มต้นหลักของไลบรารี่
+- `CustomBlock` - Base class สำหรับสร้างบล็อกใหม่
+- `CustomItem` - Base class สำหรับสร้างไอเทมใหม่
+- `CustomEntity` - Base class สำหรับสร้าง Entity ใหม่
+
+**Utility Classes:**
+- `WorldUtil` - เครื่องมือจัดการ World และ Dimension
+- `PlayerUtil` - เครื่องมือจัดการ Player
+- `ItemUtil` - เครื่องมือจัดการ Item
+- `BlockUtil` - เครื่องมือจัดการ Block
+
+**Config System:**
+- รองรับ JSON และ TOML
+- Auto-reload เมื่อมีการแก้ไข
+- Type-safe และ comment support
+
+เอกสารฉบับเต็มและตัวอย่างเพิ่มเติมสามารถดูได้ที่ [Wiki](../../wiki) ของโปรเจค
 
 ## 🤝 การมีส่วนร่วม
 
