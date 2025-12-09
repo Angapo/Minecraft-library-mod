@@ -8,6 +8,15 @@
         "category": "tech",
         "popular": true
     },
+     {
+        "name": "TEST!!!",
+        "description": "ERROR",
+        "imgurl": "https://play-lh.googleusercontent.com/FbMLivxQWbv25dvwmCpAZnTC4iRAs7wr1dxRzhi6aDnNDFE7u6BTQf1up4CuzjZvDg=w526-h296-rw",
+        "version-mod": "ERROR",
+        "link": "https://raw.githubusercontent.com/Angapo/Minecraft-library-mod/refs/heads/main/Library/mod/test.txt",
+        "category": "tech",
+        "popular": true
+    },
     {
         "name": "JEI",
         "description": "ดู Recipe การคราฟต์ทั้งหมด",
